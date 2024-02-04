@@ -1,5 +1,14 @@
 # Database Structure
 
+## Table of Contents
+
+- [Database Structure](#database-structure)
+  - [Table of Contents](#table-of-contents)
+  - [Users Collection](#users-collection)
+  - [Elections Collection](#elections-collection)
+  - [Candidates Collection](#candidates-collection)
+  - [Parties collection](#parties-collection)
+
 ## Users Collection
 
 This collection stores information about both voters and admins.
@@ -7,6 +16,7 @@ This collection stores information about both voters and admins.
 ```json
 {
   "_id": ObjectId,
+  "authId": string,
   "username": string,
   "password": "hashed_password",
   "roles": string[],
