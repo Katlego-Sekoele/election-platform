@@ -24,6 +24,7 @@ class Election {
     parties: [{ type: Schema.Types.ObjectId, ref: 'party' }],
     createdAt: { type: Schema.Types.Date, default: Date.now() },
     updatedAt: { type: Schema.Types.Date },
+    votes: [{ type: Schema.Types.ObjectId, ref: 'vote' }],
   });
   // static to avoid creating a new instance for ever object
   static model = mongoose.model('election', this._schema);

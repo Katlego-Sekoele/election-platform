@@ -12,7 +12,7 @@ class Candidate {
     },
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
-    party: { type: Schema.Types.ObjectId, ref: 'party' },
+    position: { type: String },
     bio: { type: String },
     createdAt: { type: Schema.Types.Date, default: Date.now() },
     updatedAt: { type: Schema.Types.Date },

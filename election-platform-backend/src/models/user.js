@@ -22,6 +22,7 @@ class User {
     identityNumber: { type: String },
     createdAt: { type: Schema.Types.Date, default: Date.now() },
     updatedAt: { type: Schema.Types.Date },
+    votes: [{ type: Schema.Types.ObjectId, ref: 'vote' }],
   });
   static model = mongoose.model('user', this._schema);
 

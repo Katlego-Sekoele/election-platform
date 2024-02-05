@@ -20,6 +20,8 @@ class Party {
     description: { type: String, trim: true },
     createdAt: { type: Schema.Types.Date, default: Date.now() },
     updatedAt: { type: Schema.Types.Date },
+    candidates: [{ type: Schema.Types.ObjectId, ref: 'candidate' }],
+    votes: [{ type: Schema.Types.ObjectId, ref: 'vote' }],
   });
   static model = mongoose.model('party', this._schema);
 
