@@ -10,8 +10,14 @@ class Party {
       required: true,
       auto: true,
     },
-    name: { type: String, required: true },
-    description: { type: String },
+    name: {
+      type: String,
+      required: true,
+      lowecase: true,
+      trim: true,
+      unique: 'That party name is already taken',
+    },
+    description: { type: String, trim: true },
     createdAt: { type: Schema.Types.Date, default: Date.now() },
     updatedAt: { type: Schema.Types.Date },
   });
