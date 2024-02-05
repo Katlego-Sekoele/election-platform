@@ -22,3 +22,9 @@ election-platform-frontend/.env.production.local
 election-platform-frontend/npm-debug.log*
 election-platform-frontend/yarn-debug.log*
 election-platform-frontend/yarn-error.log*
+
+.env
+election-platform-backend/.env
+
+election-platform-frontend/package-lock.json
+election-platform-backend/package-lock.json

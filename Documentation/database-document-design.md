@@ -8,6 +8,7 @@
   - [Elections Collection](#elections-collection)
   - [Candidates Collection](#candidates-collection)
   - [Parties collection](#parties-collection)
+  - [Votes Collection](#votes-collection)
 
 ## Users Collection
 
@@ -23,6 +24,7 @@ This collection stores information about both voters and admins.
   "identityNumber": string,
   "createdAt": datetime,
   "updatedAt": datetime,
+  "votes": ref(Votes)[],
 }
 
 ```
@@ -38,9 +40,10 @@ This collection stores information about elections.
   "type": string,
   "startDate": datetime,
   "endDate": datetime,
-  "parties": ObjectId[],
+  "parties": ref(Parties)[],
   "createdAt": datetime,
   "updatedAt": datetime,
+  "votes": ref(Votes)[],
 }
 ```
 
@@ -51,9 +54,10 @@ This collection stores information about candidates belonging to a party
 ```json
 {
   "_id": ObjectId,
-  "name": string,
-  "partyId": ObjectId,
+  "firstName": string,
+  "lastName": string,
   "bio": string,
+  "position": string,
   "createdAt": datetime,
   "updatedAt": datetime,
 }
@@ -69,7 +73,24 @@ This collection stores information about parties in the system
   "_id": ObjectId,
   "name": string,
   "description": string,
-  "createdAt": datetiem,
+  "createdAt": datetime,
+  "updatedAt": datetime,
+  "candidates": ref(Candidates)[],
+  "votes": ref(Votes)[],
+}
+
+```
+
+## Votes Collection
+
+This collection stores information about votes casted by voters
+
+```json
+{
+  "_id": ObjectId,
+  "user": ref(Users),
+  "party": ref(party),
+  "createdAt": datetime,
   "updatedAt": datetime,
 }
 
