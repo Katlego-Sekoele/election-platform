@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   title: Election System API
   version: 1.0.0
-  description: REST API for managing elections, users, candidates, and parties.
+  description: REST API for managing elections, users, candidates, parties, and votes.
 
 paths:
   /api/users:
@@ -297,6 +297,104 @@ paths:
         '404':
           description: Party not found
 
+  /api/elections/{electionId}/parties:
+    post:
+      tags:
+        - Elections
+      summary: Add a new party to an election
+      parameters:
+        - $ref: '#/components/parameters/ElectionId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PartyInput'
+      responses:
+        '201':
+          description: Party added to the election successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartyResponse'
+        '400':
+          description: Bad request. Check request payload.
+        '404':
+          description: Election not found.
+
+  /api/elections/{electionId}/parties/{partyId}:
+    delete:
+      tags:
+        - Elections
+      summary: Delete a party from an election
+      parameters:
+        - $ref: '#/components/parameters/ElectionId'
+        - $ref: '#/components/parameters/PartyId'
+      responses:
+        '204':
+          description: Party deleted from the election successfully
+        '404':
+          description: Election or party not found.
+
+  /api/parties/{partyId}/candidates:
+    post:
+      tags:
+        - Parties
+      summary: Add a candidate to a party
+      parameters:
+        - $ref: '#/components/parameters/PartyId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CandidateInput'
+      responses:
+        '201':
+          description: Candidate added to the party successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CandidateResponse'
+        '400':
+          description: Bad request. Check request payload.
+        '404':
+          description: Party not found.
+
+  /api/parties/{partyId}/candidates/{candidateId}:
+    delete:
+      tags:
+        - Parties
+      summary: Delete a candidate from a party
+      parameters:
+        - $ref: '#/components/parameters/PartyId'
+        - $ref: '#/components/parameters/CandidateId'
+      responses:
+        '204':
+          description: Candidate deleted from the party successfully
+        '404':
+          description: Party or candidate not found.
+
+  /api/votes:
+    post:
+      tags:
+        - Votes
+      summary: Cast a vote
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VoteInput'
+      responses:
+        '201':
+          description: Vote casted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vote'
+        '400':
+          description: Bad request. Check request payload.
+        '404':
+          description: User, party, or election not found.
+
 components:
   schemas:
     UserInput:
@@ -329,7 +427,26 @@ components:
             updatedAt:
               type: string
               format: date-time
-
+            votes:
+              type: array
+              items:
+                $ref: '#/components/schemas/UserVote'
+    
+    PartyVoteUser:
+      allOf:
+        - $ref: '#/components/schemas/UserInput'
+        - type: object
+          properties:
+            _id:
+              type: string
+              format: uuid
+            createdAt:
+              type: string
+              format: date-time
+            updatedAt:
+              type: string
+              format: date-time
+    
     ElectionInput:
       type: object
       properties:
@@ -364,6 +481,10 @@ components:
             updatedAt:
               type: string
               format: date-time
+            votes:
+              type: array
+              items:
+                $ref: '#/components/schemas/Vote'
             parties:
               type: array
               items:
@@ -376,8 +497,6 @@ components:
           type: string
         lastName:
           type: string
-        party:
-          type: string  # Assuming party ID is used
         bio:
           type: string
 
@@ -395,8 +514,6 @@ components:
             updatedAt:
               type: string
               format: date-time
-            party:
-              $ref: '#/components/schemas/Party'
 
     PartyInput:
       type: object
@@ -420,6 +537,88 @@ components:
             updatedAt:
               type: string
               format: date-time
+            candidates:
+              type: array
+              items:
+                $ref: '#/components/schemas/Candidate'
+            votes:
+              type: array
+              items:
+                $ref: '#/components/schemas/PartyVote'
+
+    PartyResponse:
+      allOf:
+        - $ref: '#/components/schemas/Party'
+        - type: object
+          properties:
+            candidates:
+              type: array
+              items:
+                $ref: '#/components/schemas/CandidateResponse'
+
+    CandidateResponse:
+      allOf:
+        - $ref: '#/components/schemas/Candidate'
+
+    VoteInput:
+      type: object
+      properties:
+        userId:
+          type: string
+          format: uuid
+        partyId:
+          type: string
+          format: uuid
+        electionId:
+          type: string
+          format: uuid
+
+    Vote:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        user:
+          $ref: '#/components/schemas/User'
+        party:
+          $ref: '#/components/schemas/Party'
+
+    PartyVote:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        user:
+          $ref: '#/components/schemas/PartyVoteUser'
+
+    UserVote:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        party:
+          $ref: '#/components/schemas/Party'
 
   parameters:
     UserId:
