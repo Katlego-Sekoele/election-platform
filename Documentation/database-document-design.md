@@ -38,7 +38,7 @@ This collection stores information about elections.
   "type": string,
   "startDate": datetime,
   "endDate": datetime,
-  "parties": ObjectId[],
+  "parties": ref(Parties)[],
   "createdAt": datetime,
   "updatedAt": datetime,
 }
@@ -51,8 +51,9 @@ This collection stores information about candidates belonging to a party
 ```json
 {
   "_id": ObjectId,
-  "name": string,
-  "partyId": ObjectId,
+  "firstName": string,
+  "lastName": string,
+  "party": ref(Parties),
   "bio": string,
   "createdAt": datetime,
   "updatedAt": datetime,
@@ -69,7 +70,7 @@ This collection stores information about parties in the system
   "_id": ObjectId,
   "name": string,
   "description": string,
-  "createdAt": datetiem,
+  "createdAt": datetime,
   "updatedAt": datetime,
 }
 
