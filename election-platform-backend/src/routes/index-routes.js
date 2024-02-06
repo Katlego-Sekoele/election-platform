@@ -1,8 +1,12 @@
 const express = require('express');
+const UserRouter = require('./user-routes');
+
 const router = express.Router();
 
-router.get('/hello-world', (req, res) => {
-  res.send(`Hello, World! Time: ${Date.now().toString()}`);
-});
+router.use('/users', UserRouter);
+// router.use('/elections');
+// router.use('/candidates');
+// router.use('/votes');
+// router.use('/parties');
 
 module.exports = router;

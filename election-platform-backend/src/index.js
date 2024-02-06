@@ -1,6 +1,7 @@
 const express = require('express');
 require('dotenv').config();
 const mongoose = require('mongoose');
+const morgan = require('morgan')
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -19,8 +20,10 @@ const connect = async () => {
   }
 };
 
+app.disable('etag');
+app.use(morgan('dev'));
 app.use(express.json());
-app.use('/', indexRoutes);
+app.use('/api', indexRoutes);
 
 connect();
 

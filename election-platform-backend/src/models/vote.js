@@ -13,9 +13,10 @@ class Vote {
     createdAt: { type: Schema.Types.Date, default: Date.now() },
     updatedAt: { type: Schema.Types.Date },
     user: { type: Schema.Types.ObjectId, ref: 'user' },
-    party: { type: Schema.Types.ObjectId, ref: 'vote' },
-  });
-  static model = mongoose.model('vote', this._schema);
+    party: { type: Schema.Types.ObjectId, ref: 'party' },
+  }).plugin(require('mongoose-autopopulate'));
+
+  static model = mongoose.model('vote', Vote._schema);
 
   vote;
 

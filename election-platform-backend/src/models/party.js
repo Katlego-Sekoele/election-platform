@@ -21,8 +21,8 @@ class Party {
     createdAt: { type: Schema.Types.Date, default: Date.now() },
     updatedAt: { type: Schema.Types.Date },
     candidates: [{ type: Schema.Types.ObjectId, ref: 'candidate' }],
-    votes: [{ type: Schema.Types.ObjectId, ref: 'vote' }],
-  });
+    votes: [{ type: Schema.Types.ObjectId, ref: 'vote', autopopulate: { select: '-party' } }],
+  }).plugin(require('mongoose-autopopulate'));
   static model = mongoose.model('party', this._schema);
 
   party;
