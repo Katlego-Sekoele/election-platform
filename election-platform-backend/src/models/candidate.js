@@ -6,8 +6,6 @@ class Candidate {
   static _schema = new mongoose.Schema({
     _id: {
       type: Schema.Types.ObjectId,
-      index: true,
-      required: true,
       auto: true,
     },
     firstName: { type: String, required: true },

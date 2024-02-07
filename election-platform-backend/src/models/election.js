@@ -6,8 +6,6 @@ class Election {
   static _schema = new mongoose.Schema({
     _id: {
       type: Schema.Types.ObjectId,
-      index: true,
-      required: true,
       auto: true,
     },
     name: {
