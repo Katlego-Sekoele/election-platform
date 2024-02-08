@@ -48,6 +48,11 @@ class User {
     return user;
   }
 
+  static async findAll() {
+    const users = User.model.find({ deletedAt: { $exists: false } }).exec();
+    return users;
+  }
+
   static async findOneAndUpdateById(id, update) {
     const updatedUser = User.model
       .findOneAndUpdate({ _id: id }, { $set: update }, { new: true })

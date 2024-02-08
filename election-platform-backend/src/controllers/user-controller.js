@@ -11,6 +11,19 @@ class UserController {
     }
   }
 
+  static async getUsers(_request, response) {
+    try {
+      const users = await UserModel.findAll();
+      if (users) {
+        response.status(200).json(users);
+      } else {
+        response.status(404).json({ error: 'Users not found' });
+      }
+    } catch (error) {
+      response.status(500).json({ error: error.message });
+    }
+  }
+
   static async createUser(request, response) {
     try {
       //find user by username

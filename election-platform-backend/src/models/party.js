@@ -15,19 +15,15 @@ class Party {
       required: true,
       lowecase: true,
       trim: true,
-      unique: 'That party name is already taken',
+      unique: true,
     },
     description: { type: String, trim: true },
     createdAt: { type: Schema.Types.Date, default: Date.now() },
     updatedAt: { type: Schema.Types.Date },
-    candidates: [{ type: Schema.Types.ObjectId, ref: 'candidate' }],
+    candidates: [{ type: Schema.Types.ObjectId, ref: 'candidate', autopopulate: true }],
     votes: [{ type: Schema.Types.ObjectId, ref: 'vote' }],
-  });
-
-  static model = mongoose.model(
-    'party',
-    Party._schema.plugin(require('mongoose-autopopulate'), { select: '-votes.party' }),
-  );
+    deletedAt: { type: Schema.Types.Date },
+  }).plugin(require('mongoose-autopopulate'));
 
   static model = mongoose.model('party', Party._schema);
 
@@ -39,6 +35,15 @@ class Party {
 
   async save() {
     await this.party.save();
+  }
+
+  static async findAll() {
+    return Party.model.find({ deletedAt: { $exists: false } }).exec();
+  }
+
+  static async findOneById(id) {
+    const party = Party.model.findOne({ _id: id, deletedAt: { $exists: false } }).exec();
+    return party;
   }
 }
 
