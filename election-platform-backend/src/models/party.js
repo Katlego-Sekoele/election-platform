@@ -30,11 +30,11 @@ class Party {
   party;
 
   constructor(party) {
-    this.party = new this.model(party);
+    this.party = new Party.model(party);
   }
 
   async save() {
-    await this.party.save();
+    return await this.party.save();
   }
 
   static async findAll() {
@@ -44,6 +44,70 @@ class Party {
   static async findOneById(id) {
     const party = Party.model.findOne({ _id: id, deletedAt: { $exists: false } }).exec();
     return party;
+  }
+
+  static async findOneAndUpdateById(id, update) {
+    update.updatedAt = new Date();
+    const updatedParty = Party.model
+      .findOneAndUpdate({ _id: id }, { $set: update }, { new: true })
+      .exec();
+    return updatedParty;
+  }
+
+  static async setDeletedAt(id) {
+    const party = await Party.findOneById(id);
+    if (party !== null) {
+      return Party.model.findOneAndUpdate({ _id: id }, { $set: { deletedAt: new Date() } }).exec();
+    } else {
+      return null;
+    }
+  }
+
+  static async addCandidateById(partyId, candidateId) {
+    const party = await Party.findOneById(partyId);
+    if (party !== null) {
+      const updatedParty = await Party.model
+        .findOneAndUpdate(
+          {
+            _id: partyId,
+            deletedAt: { $exists: false },
+          },
+          {
+            $push: { candidates: candidateId },
+          },
+          {
+            new: true,
+          },
+        )
+        .exec();
+      return updatedParty;
+    } else {
+      return null;
+    }
+  }
+
+  static async deleteCandidateById(partyId, candidateId) {
+    const party = await Party.findOneById(partyId);
+    if (party !== null) {
+      const updatedParty = await Party.model
+        .findOneAndUpdate(
+          {
+            _id: partyId,
+            candidates: candidateId,
+            deletedAt: { $exists: false },
+          },
+          {
+            $pull: { candidates: candidateId },
+          },
+          {
+            new: true,
+          },
+        )
+        .exec();
+      return updatedParty;
+    } else {
+      return null;
+    }
   }
 }
 

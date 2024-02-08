@@ -47,6 +47,7 @@ class Election {
   }
 
   static async findOneAndUpdateById(id, update) {
+    update.updatedAt = new Date();
     return Election.model.findOneAndUpdate({ _id: id }, { $set: update }, { new: true }).exec();
   }
 
@@ -87,6 +88,15 @@ class Election {
         )
         .exec();
     }
+  }
+
+  static async addVoteById(electionId, voteId) {
+    const election = Election.model.findOneAndUpdate(
+      { _id: electionId, deletedAt: { $exists: false } },
+      { $addToSet: { votes: voteId } },
+      { new: true },
+    );
+    return election;
   }
 }
 

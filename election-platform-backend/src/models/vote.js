@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
+const Election = require('./election');
 const User = require('./user');
 const Party = require('./party');
 
@@ -21,11 +22,13 @@ class Vote {
   vote;
 
   constructor(vote) {
-    this.vote = new this.model(vote);
+    const { userId, partyId, electionId } = vote;
+    this.vote = new Vote.model({ user: userId, party: partyId });
+    const election = Election.addVoteById(electionId, this.vote._id);
   }
 
   async save() {
-    await this.vote.save();
+    return await this.vote.save();
   }
 }
 

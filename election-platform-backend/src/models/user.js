@@ -54,6 +54,7 @@ class User {
   }
 
   static async findOneAndUpdateById(id, update) {
+    update.updatedAt = new Date();
     const updatedUser = User.model
       .findOneAndUpdate({ _id: id }, { $set: update }, { new: true })
       .exec();
