@@ -14,6 +14,7 @@
     --popover-foreground: 222.2 84% 4.9%;
 
     --primary: 222.2 47.4% 11.2%;
+    --light: grey;
     --primary-foreground: 210 40% 98%;
 
     --secondary: 210 40% 96.1%;
@@ -35,6 +36,24 @@
     --radius: 0.5rem;
 
     --padding-small: 0.5rem;
+    --padding-medium: 1rem;
+      --padding-large: 1.5rem;
+      --padding-xlarge: 2rem;
+    
+      --margin-small: 0.5rem;
+      --margin-medium: 1rem;
+      --margin-large: 1.5rem;
+      --margin-xlarge: 2rem;
+    
+      --gap-small: 0.5rem;
+      --gap-medium: 1rem;
+      --gap-large: 1.5rem;
+      --gap-xlarge: 2rem;
+    
+      --border-radius-small: 0.5em;
+      --border-radius-medium: 1em;
+      --border-radius-large: 1.5em;
+      --border-radius-xlarge: 2em;
   }
     .dark {
       --background: 222.2 84% 4.9%;
@@ -67,6 +86,34 @@
     }
 }
 
+h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: hsl(var(--primary));
+  line-height: 2.2rem;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.footer {
+  padding: var(--padding-large);
+  text-align: center;
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+
+h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: hsl(var(--primary));
+  line-height: 2.2rem;
+  margin-bottom: 1rem;
+}
+
+#App {
+  min-height: calc(100vh - 8rem);
+}
 @layer base {
   * {
     @apply border-border;

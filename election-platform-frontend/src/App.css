@@ -1,5 +1,5 @@
 #App {
-  padding: var(--padding);
+  padding: var(--padding-xlarge);
 }
 
 .padding-small {
@@ -10,4 +10,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+@media (max-width: 768px) {
+  #App {
+    padding: var(--padding-small);
+  }
 }

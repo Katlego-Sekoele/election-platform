@@ -2,11 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import "./tailwind.output.css";
 import "./index.css";
-import Home from "./routes/home";
-import Admin from "./routes/admin";
-import Authentication from "./routes/authentication";
-import Election from "./routes/election";
-import ErrorPage from "./routes/error";
+import Home from "./routes/home/home";
+import Admin from "./routes/admin/admin";
+import Authentication from "./routes/authentication/authentication";
+import Election from "./routes/election/election";
+import ErrorPage from "./routes/error/error";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import App from "./App";

@@ -7,9 +7,11 @@ export default class ApiClient {
 
 	get = {
 		user: async (id = null) => {
+			console.log("processing request");
 			const url = id
 				? `${this.apiUrl}/users/${id}`
 				: `${this.apiUrl}/users`;
+			console.log("processing request:", url);
 			const response = await fetch(url);
 			const data = await response.json();
 			return data;
