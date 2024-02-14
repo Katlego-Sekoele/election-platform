@@ -1,6 +1,3 @@
-// MongoDB Playground
-// Connect to your MongoDB database and run this script to generate more sample data.
-
 // Function to generate a random string
 function generateRandomString(length) {
 	const characters =
@@ -29,6 +26,7 @@ db.users.drop();
 db.parties.drop();
 db.elections.drop();
 db.candidates.drop();
+db.votes.drop();
 
 // Generate a large number of users
 const numberOfUsers = 100;
@@ -127,3 +125,27 @@ const votesData = Array.from({ length: numberOfVotes }, (_, index) => ({
 // Insert sample votes into the Votes collection
 const votesResult = db.votes.insertMany(votesData);
 print(`Inserted ${votesResult.insertedIds.length} votes`);
+
+// Update users with votes
+const usersToUpdate = votesData.map((vote, index) => ({
+	updateOne: {
+		filter: { _id: vote.user },
+		update: { $push: { votes: votesResult.insertedIds[index] } },
+	},
+}));
+
+// Bulk update users with assigned votes
+db.users.bulkWrite(usersToUpdate);
+print(`Assigned votes to users`);
+
+// Update parties with votes
+const partiesToUpdateWithVotes = votesData.map((vote, index) => ({
+	updateOne: {
+		filter: { _id: vote.party },
+		update: { $push: { votes: votesResult.insertedIds[index] } },
+	},
+}));
+
+// Bulk update parties with assigned votes
+db.parties.bulkWrite(partiesToUpdateWithVotes);
+print(`Assigned votes to parties`);
