@@ -1,4 +1,4 @@
-class ApiClient {
+export default class ApiClient {
 	apiUrl;
 
 	constructor(url) {
