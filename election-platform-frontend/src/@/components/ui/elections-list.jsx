@@ -10,26 +10,29 @@ import {
 import { Badge } from "@/components/ui/badge";
 import ApiClient from "utilities/api-client";
 import "./styles/elections-list.css";
+import { Link } from "react-router-dom";
 
 export function ElectionCard(props) {
-	const { name, type, description, startDate, endDate } = props;
+	const { name, type, description, startDate, endDate, id } = props;
 
 	return (
 		<Card>
-			<CardHeader>
-				<CardTitle>{name}</CardTitle>
-				<CardDescription>
-					{description || "No description provided."}
-				</CardDescription>
-			</CardHeader>
-			<CardContent>
-				<Badge variant="">{type}</Badge>
-			</CardContent>
-			<CardFooter>
-				<Badge variant="secondary">
-					{new Date(endDate).toLocaleDateString()}
-				</Badge>
-			</CardFooter>
+			<Link to={`/election/${id}`}>
+				<CardHeader>
+					<CardTitle>{name}</CardTitle>
+					<CardDescription>
+						{description || "No description provided."}
+					</CardDescription>
+				</CardHeader>
+				<CardContent>
+					<Badge variant="">{type}</Badge>
+				</CardContent>
+				<CardFooter>
+					<Badge variant="secondary">
+						{new Date(endDate).toLocaleDateString()}
+					</Badge>
+				</CardFooter>
+			</Link>
 		</Card>
 	);
 }
@@ -72,6 +75,7 @@ export function ElectionsList(props) {
 			{elections?.map((election) => (
 				<ElectionCard
 					key={election._id}
+					id={election._id}
 					name={election.name}
 					type={election.type}
 					description={election.description}

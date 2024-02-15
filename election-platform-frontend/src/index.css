@@ -114,6 +114,7 @@ h2 {
 #App {
   min-height: calc(100vh - 8rem);
 }
+
 @layer base {
   * {
     @apply border-border;

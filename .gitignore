@@ -28,3 +28,5 @@ election-platform-backend/.env
 
 election-platform-frontend/package-lock.json
 election-platform-backend/package-lock.json
+scripts/package-lock.json
+scripts/node_modules

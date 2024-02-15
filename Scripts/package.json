@@ -1,0 +1,17 @@
+{
+	"name": "@maesela/mongo-scripts",
+	"version": "1.0.0",
+	"description": "",
+	"type": "module",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"start": "node playground-2.mongodb.js"
+	},
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"@faker-js/faker": "^8.4.1",
+		"mongo": "^0.1.0",
+		"mongodb": "^6.3.0"
+	}
+}

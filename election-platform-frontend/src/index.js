@@ -5,11 +5,12 @@ import "./index.css";
 import Home from "./routes/home/home";
 import Admin from "./routes/admin/admin";
 import Authentication from "./routes/authentication/authentication";
-import Election from "./routes/election/election";
+import ElectionsBrowser from "./routes/election/elections-browser";
 import ErrorPage from "./routes/error/error";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import App from "./App";
+import Election from "routes/election/election";
 
 const router = createBrowserRouter([
 	{
@@ -34,7 +35,7 @@ const router = createBrowserRouter([
 			},
 			{
 				path: "/election",
-				element: <Election />,
+				element: <ElectionsBrowser />,
 				errorElement: <ErrorPage />,
 			},
 			{
