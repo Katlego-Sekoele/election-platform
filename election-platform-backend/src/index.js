@@ -4,12 +4,14 @@ const mongoose = require('mongoose');
 const morgan = require('morgan');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+const UserModel = require('./models/user');
 
 const supabaseClient = require('./lib/supabase');
 
 const PORT = process.env.PORT || 3001;
 const app = express();
 const indexRoutes = require('./routes/index-routes');
+const User = require('./models/user');
 
 const connect = async () => {
   try {
@@ -49,6 +51,35 @@ app.get('/auth/confirm', async function (req, res) {
     // return the user to an error page with some instructions
     res.status(500).json({ message: 'Incomplete request' });
   }
+});
+app.use(async (request, response, next) => {
+  request.supabase = supabaseClient.createClient({ req: request, res: response });
+
+  const user = await request.supabase.auth.getUser(request.headers.authorization.split(' ')[1]);
+
+  if (user.error) {
+    request.user = null;
+    next();
+    return;
+  }
+
+  const mongoUser = await UserModel.findOneByAuthId(user.data.user.id);
+  if (mongoUser) {
+    request.user = { ...mongoUser, ...user.data.user };
+  } else {
+    const newUser = new User({
+      authId: user.data.user.id,
+      username: user.data.user.email,
+      roles: ['user'],
+    });
+    await newUser.save();
+    request.user = { ...newUser, ...user.data.user };
+  }
+
+  console.log('Request user:', request.user);
+
+  next();
+  return;
 });
 app.use('/api', indexRoutes);
 

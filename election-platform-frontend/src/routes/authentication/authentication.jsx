@@ -51,7 +51,8 @@ export default function Authentication() {
 			});
 		} else if (data) {
 			console.log("Signed in successfully", data);
-			ApiClient.setJwt(data.session.access_token);
+            ApiClient.setJwt(data.session.access_token);
+			ApiClient.setRefreshToken(data.session.refresh_token);
 			toast({
 				description: "Signed in successfully",
 			});

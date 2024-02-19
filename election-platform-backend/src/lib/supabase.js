@@ -4,8 +4,8 @@ exports.createClient = (context) => {
   return createServerClient(process.env.SUPABASE_URL, process.env.SUPABASE_API_KEY, {
     cookies: {
       get: (key) => {
-        const cookies = context.req.cookies;
-        const cookie = cookies[key] ?? '';
+        const cookies = context.req?.cookies;
+        const cookie = cookies?.key ?? '';
         return decodeURIComponent(cookie);
       },
       set: (key, value, options) => {

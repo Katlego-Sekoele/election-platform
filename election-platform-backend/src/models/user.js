@@ -66,6 +66,11 @@ class User {
     return user;
   }
 
+  static async findOneByAuthId(authId) {
+    const user = User.model.findOne({ authId: authId }).exec();
+    return user;
+  }
+
   static async setDeletedAt(id) {
     const user = await User.findOneById(id);
     if (user === null) {

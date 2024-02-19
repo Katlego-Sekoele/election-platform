@@ -16,7 +16,36 @@ import { supabase } from "@supabase/auth-ui-shared";
 
 function App() {
 	const [session, setSession] = useState(null);
-	useEffect(() => {
+	// useEffect(() => {
+	// 	supabaseClient.auth.getSession().then(({ data: { session } }) => {
+	// 		setSession(session);
+	// 	});
+
+	// 	const {
+	// 		data: { subscription },
+	// 	} = supabaseClient.auth.onAuthStateChange((_event, session) => {
+	// 		setSession(session);
+	// 	});
+
+	// 	const getToken = () => {
+	// 		const storageKey = `sb-${process.env.REACT_APP_SUPABASE_PROJECT_ID}-auth-token`;
+	// 		const sessionDataString = localStorage.getItem(storageKey);
+	// 		const sessionData = JSON.parse(sessionDataString || "null");
+	// 		const token = sessionData?.access_token;
+
+	// 		return token;
+	// 	};
+
+	// 	supabaseClient.auth.refreshSession().then(({ data: { session } }) => {
+	// 		setSession(session);
+	// 		console.log("Session refreshed", session);
+	// 		ApiClient.setJwt(getToken());
+	// 	});
+
+	// 	return () => subscription.unsubscribe();
+	// }, []);
+
+	function handleSupabase() {
 		supabaseClient.auth.getSession().then(({ data: { session } }) => {
 			setSession(session);
 		});
@@ -25,24 +54,19 @@ function App() {
 			data: { subscription },
 		} = supabaseClient.auth.onAuthStateChange((_event, session) => {
 			setSession(session);
+			ApiClient.setJwt(session?.access_token);
+			ApiClient.setRefreshToken(session?.refresh_token);
 		});
 
-		const getToken = () => {
-			const storageKey = `sb-${process.env.REACT_APP_SUPABASE_PROJECT_ID}-auth-token`;
-			const sessionDataString = localStorage.getItem(storageKey);
-			const sessionData = JSON.parse(sessionDataString || "null");
-			const token = sessionData?.access_token;
-
-			return token;
-		};
-
-		supabaseClient.auth.refreshSession().then(({ data: { session } }) => {
-			setSession(session);
-			console.log("Session refreshed", session);
-			ApiClient.setJwt(getToken());
-		});
+		setSession(session);
+		ApiClient.setJwt(session?.access_token);
+		ApiClient.setRefreshToken(session?.refresh_token);
 
 		return () => subscription.unsubscribe();
+	}
+
+	useEffect(() => {
+		handleSupabase();
 	}, []);
 
 	return useMemo(

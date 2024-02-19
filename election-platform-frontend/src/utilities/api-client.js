@@ -1,6 +1,7 @@
 export default class ApiClient {
 	apiUrl;
 	static jwt;
+	static refreshToken;
 
 	constructor(url, jwt = undefined) {
 		this.apiUrl = url;
@@ -13,6 +14,10 @@ export default class ApiClient {
 		ApiClient.jwt = jwt;
 	}
 
+	static setRefreshToken(refreshToken) {
+		ApiClient.refreshToken = refreshToken;
+	}
+
 	get = {
 		user: async (id = null) => {
 			const url = id
@@ -20,7 +25,7 @@ export default class ApiClient {
 				: `${this.apiUrl}/users`;
 			const response = await fetch(url, {
 				headers: {
-					Authorization: `Bearer ${ApiClient.jwt}`,
+					Authorization: `Bearer ${ApiClient.jwt} ${ApiClient.refreshToken}`,
 				},
 			});
 			const data = await response.json();
@@ -31,7 +36,7 @@ export default class ApiClient {
 				? `${this.apiUrl}/elections/${id}`
 				: `${this.apiUrl}/elections`;
 			const headers = {
-				Authorization: `Bearer ${ApiClient.jwt}`,
+				Authorization: `Bearer ${ApiClient.jwt} ${ApiClient.refreshToken}`,
 			};
 			console.log("headers", headers);
 			const response = await fetch(url, {
