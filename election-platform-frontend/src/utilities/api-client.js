@@ -20,7 +20,7 @@ export default class ApiClient {
 
 	auth = {
 		confirm: async (token, type) => {
-			const url = `${process.env.REACT_APP_AUTH_URL}/auth/confirm?token=${token}&type=${type}`;
+			const url = `${process.env.REACT_APP_AUTH_URL}/auth/confirm?token_hash=${token}&type=${type}`;
 			const response = await fetch(url);
 			const data = await response.json();
 			const error = response.status === 500 ? data : null;
