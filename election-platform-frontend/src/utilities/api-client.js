@@ -18,6 +18,15 @@ export default class ApiClient {
 		ApiClient.refreshToken = refreshToken;
 	}
 
+	auth = {
+		confirm: async (token, type) => {
+			const url = `${this.apiUrl}/auth/confirm/?token=${token}&type=${type}`;
+			const response = await fetch(url);
+			const data = await response.json();
+			return data;
+		},
+	};
+
 	get = {
 		me: async () => {
 			const url = `${this.apiUrl}/me`;
