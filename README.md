@@ -2,6 +2,21 @@
 
 This repository consists of two projects: `election-platform-frontend` and `election-platform-backend`. The `election-platform-frontend` project is built with Create React App, while the `election-platform-backend` is a standard Express backend.
 
+## Supabase Configuration
+
+This project utilizes [Supabase](https://supabase.io/) for authentication. When implementing user authentication with Supabase, it's crucial to ensure that the redirect URLs are configured correctly to handle email confirmation.
+
+### Redirect URLs
+
+To confirm email addresses successfully, make sure that the redirect URLs in your Supabase project are configured appropriately. When a user registers and needs to confirm their email, Supabase redirects them to a specified URL. Ensure that this URL is set up to handle email confirmation requests.
+
+For more information on configuring redirect URLs in Supabase, refer to the [Supabase Authentication documentation](https://supabase.io/docs/guides/authentication#email-confirmation).
+
+## Getting Started with Create React App
+
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+
 ## Frontend (Create React App)
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
