@@ -26,6 +26,7 @@ const connect = async () => {
   }
 };
 
+app.options('*', cors());  // Respond to preflight requests
 app.use(cors());
 app.disable('etag');
 app.use(morgan('dev'));
