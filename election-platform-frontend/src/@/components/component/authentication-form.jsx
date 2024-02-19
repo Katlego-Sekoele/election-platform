@@ -19,12 +19,6 @@ export function AuthenticationForm(props) {
 
 	function validateForm() {
 		if (signUp && password !== confirmPassword) {
-			console.log(
-				"password: ",
-				password,
-				"confirmPassword: ",
-				confirmPassword
-			);
 			toast({
 				variant: "destructive",
 				description: "Passwords do not match",

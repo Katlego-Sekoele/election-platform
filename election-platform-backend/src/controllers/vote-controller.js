@@ -14,13 +14,20 @@ class Vote {
           if (!Boolean(election.parties.find((party) => party._id.toString() === partyId))) {
             res.status(400).json({ error: 'Party not found in election' });
           } else {
-            const vote = new VoteModel({ electionId, userId, partyId });
-            const newVote = await vote.save();
-            console.log(newVote);
-            if (newVote) {
-              res.status(201).json(newVote);
+            // check if user has already voted
+            const voteExists = await VoteModel.findVote(userId, electionId);
+
+            if (voteExists) {
+              res.status(400).json({ error: 'User has already voted' });
+              return;
             } else {
-              res.status(500).json({ error: 'Vote not created' });
+              const vote = new VoteModel({ electionId, userId, partyId });
+              const newVote = await vote.save();
+              if (newVote) {
+                res.status(201).json(newVote);
+              } else {
+                res.status(500).json({ error: 'Vote not created' });
+              }
             }
           }
         }
@@ -28,7 +35,6 @@ class Vote {
         res.status(400).json({ error: 'userId, partyId, and electionId are required' });
       }
     } catch (error) {
-      console.log(error);
       res.status(400).send(error);
     }
   }

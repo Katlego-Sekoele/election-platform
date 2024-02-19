@@ -27,6 +27,16 @@ class Vote {
     const election = Election.addVoteById(electionId, this.vote._id);
   }
 
+  static async findVote(userId, electionId) {
+    // check if user exists in the votes array of the election
+    const election = await Election.findOneById(electionId);
+    if (election === null) {
+      return null;
+    }
+    const vote = election.votes.find((v) => v.user.toString() === userId);
+    return vote;
+  }
+
   async save() {
     return await this.vote.save();
   }

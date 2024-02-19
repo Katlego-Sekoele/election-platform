@@ -55,6 +55,14 @@ app.get('/auth/confirm', async function (req, res) {
 app.use(async (request, response, next) => {
   request.supabase = supabaseClient.createClient({ req: request, res: response });
 
+  const token = request.headers.authorization;
+
+  if (!token) {
+    request.user = null;
+    next();
+    return;
+  }
+
   const user = await request.supabase.auth.getUser(request.headers.authorization.split(' ')[1]);
 
   if (user.error) {
@@ -65,21 +73,23 @@ app.use(async (request, response, next) => {
 
   const mongoUser = await UserModel.findOneByAuthId(user.data.user.id);
   if (mongoUser) {
-    request.user = { ...mongoUser, ...user.data.user };
+    request.user = { ...user.data.user, ...mongoUser._doc };
   } else {
     const newUser = new User({
       authId: user.data.user.id,
       username: user.data.user.email,
+      email: user.data.user.email,
       roles: ['user'],
     });
     await newUser.save();
-    request.user = { ...newUser, ...user.data.user };
+    request.user = { ...user.data.user, ...newUser._doc };
   }
-
-  console.log('Request user:', request.user);
 
   next();
   return;
+});
+app.get('/api/me', (req, res) => {
+  res.json(req.user);
 });
 app.use('/api', indexRoutes);
 

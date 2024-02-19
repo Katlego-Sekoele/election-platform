@@ -1,0 +1,20 @@
+.parties-container {
+    margin-top: var(--margin-small);
+}
+
+.standings-container {
+    margin-top: var(--margin-small);
+}
+
+.party-votes-li {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: var(--padding-small);
+    margin-bottom: var(--margin-large);
+}
+
+.vote-number-badge {
+    margin-bottom: var(--margin-small);
+}

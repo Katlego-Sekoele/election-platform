@@ -19,6 +19,16 @@ export default class ApiClient {
 	}
 
 	get = {
+		me: async () => {
+			const url = `${this.apiUrl}/me`;
+			const response = await fetch(url, {
+				headers: {
+					Authorization: `Bearer ${ApiClient.jwt}`,
+				},
+			});
+			const data = await response.json();
+			return data;
+		},
 		user: async (id = null) => {
 			const url = id
 				? `${this.apiUrl}/users/${id}`
@@ -38,7 +48,6 @@ export default class ApiClient {
 			const headers = {
 				Authorization: `Bearer ${ApiClient.jwt} ${ApiClient.refreshToken}`,
 			};
-			console.log("headers", headers);
 			const response = await fetch(url, {
 				headers,
 			});
