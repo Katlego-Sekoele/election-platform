@@ -23,7 +23,8 @@ export default class ApiClient {
 			const url = `${this.apiUrl}/auth/confirm/?token=${token}&type=${type}`;
 			const response = await fetch(url);
 			const data = await response.json();
-			return data;
+			const error = response.status === 500 ? data : null;
+			return [data, error];
 		},
 	};
 
