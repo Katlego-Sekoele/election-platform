@@ -110,13 +110,6 @@ export function AuthenticationForm(props) {
 								? "Already have an account? Sign in"
 								: "Don't have an account? Sign up"}
 						</a>
-						<a
-							style={{
-								textDecoration: "underline",
-							}}
-						>
-							Forgot password
-						</a>
 					</div>
 				</div>
 			</CardContent>

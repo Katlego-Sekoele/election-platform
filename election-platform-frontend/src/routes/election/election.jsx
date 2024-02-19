@@ -5,19 +5,17 @@ import { PartiesList } from "@/components/ui/party-list";
 import {
 	Card,
 	CardContent,
-	CardDescription,
 	CardFooter,
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
 import "./election.css";
-import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Button } from "@/components/ui/button";
 import { SupabaseSessionContext } from "utilities/supabase-client";
 import { useToast } from "@/components/ui/use-toast";
+import { Standings } from "./Standings";
 
 export default function Election() {
 	const { id } = useParams();
@@ -45,6 +43,7 @@ export default function Election() {
 							votes={election.votes}
 							election={election}
 							fetchData={fetchData}
+							showBallot={true}
 						/>
 					</section>
 					<section className="parties-container">
@@ -57,61 +56,7 @@ export default function Election() {
 	);
 }
 
-function Standings(props) {
-	const { votes, parties, election, fetchData } = props;
-
-	const [partiesState, setPartiesState] = useState(parties);
-	const [votesState, setVotesState] = useState(votes);
-	const [voteCount, setVoteCount] = useState([]);
-
-	useEffect(() => {
-		setPartiesState(parties);
-		setVotesState(votes);
-		setVoteCount(countVotes(parties, votes));
-	}, [parties, votes]);
-
-	return (
-		<>
-			<Card>
-				<CardHeader>
-					<CardTitle>Vote Count</CardTitle>
-					<CardDescription>
-						<p>Vote count for each party</p>
-					</CardDescription>
-				</CardHeader>
-				<CardContent>
-					<ul>
-						{voteCount.map((party) => (
-							<li key={party._id} className="party-votes-li">
-								{party.name}
-								<Badge className="vote-number-badge">
-									{party.votes}
-								</Badge>
-								<Progress
-									value={
-										(party.votes / votesState.length) * 100
-									}
-								></Progress>
-							</li>
-						))}
-					</ul>
-					<p>
-						Total Votes: <Badge>{votesState.length}</Badge>
-					</p>
-				</CardContent>
-				<CardFooter>
-					<VotingSubCard
-						parties={parties}
-						election={election}
-						fetchData={fetchData}
-					/>
-				</CardFooter>
-			</Card>
-		</>
-	);
-}
-
-function VotingSubCard(props) {
+export function VotingSubCard(props) {
 	const { parties, election, fetchData } = props;
 	const [selectedParty, setSelectedParty] = useState(null);
 	const [session, setSession] = useContext(SupabaseSessionContext);
@@ -199,7 +144,7 @@ function VotingSubCard(props) {
 	);
 }
 
-function countVotes(parties, votes) {
+export function countVotes(parties, votes) {
 	const partyVotes = parties.map((party) => {
 		const partyVotes = votes.filter((vote) => vote.party._id === party._id);
 		return {

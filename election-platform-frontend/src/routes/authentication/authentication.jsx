@@ -33,7 +33,21 @@ export default function Authentication() {
 		await supabaseClient.auth.signOut({ scope: "local" });
 	}
 
-	async function signUpNewUser({ email, password }) {
+    async function signUpNewUser({ email, password }) {
+		const mailCheckResponse = await (
+			await fetch(`https://api.mailcheck.ai/email/${email}`)
+		).json();
+
+		if (mailCheckResponse.disposable) {
+			toast({
+				variant: "destructive",
+				title: "Unauthorized email address",
+				description:
+					"For the integrity of the platform, we do not allow disposable email addresses. Please use a valid email address.",
+			});
+			return;
+		}
+
 		const { data, error } = await supabaseClient.auth.signUp({
 			email,
 			password,
@@ -48,9 +62,22 @@ export default function Authentication() {
 				description: error.message,
 			});
 		} else if (data) {
-			toast({
-				description: "Signed up successfully",
-			});
+			console.log(data);
+
+			if (!data.role) {
+				toast({
+					variant: "destructive",
+					title: "User already exists",
+					description:
+						"Please sign in with your credentials, or check your inbox for a confirmation email.",
+				});
+			} else {
+				toast({
+					title: "Signed up successfully",
+					description:
+						"Please check your inbox for a confirmation email.",
+				});
+			}
 		}
 	}
 
