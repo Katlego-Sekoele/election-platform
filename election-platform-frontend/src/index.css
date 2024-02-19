@@ -111,6 +111,11 @@ h2 {
   margin-bottom: 1rem;
 }
 
+.centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 #App {
   min-height: calc(100vh - 8rem);
 }

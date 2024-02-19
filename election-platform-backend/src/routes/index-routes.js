@@ -5,6 +5,7 @@ const CandidatesRouter = require('./candidate-routes');
 const VotesRouter = require('./vote-routes');
 const PartyRouter = require('./party-routes');
 const router = express.Router();
+const authorizer = require('../controllers/authorizer-middleware');
 
 router.use('/users', UserRouter);
 router.use('/elections', ElectionRouter);

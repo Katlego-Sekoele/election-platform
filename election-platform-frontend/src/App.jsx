@@ -1,26 +1,61 @@
 import './App.css';
+import { createContext, useContext, useEffect, useState, useMemo } from "react";
 import { Outlet, Link } from "react-router-dom";
 import {
 	NavigationMenu,
-	NavigationMenuContent,
-	NavigationMenuIndicator,
 	NavigationMenuItem,
 	NavigationMenuLink,
 	NavigationMenuList,
-	NavigationMenuTrigger,
-	NavigationMenuViewport,
 	navigationMenuTriggerStyle,
 } from "./@/components/ui/navigation-menu";
+import supabaseClient, {
+	SupabaseSessionContext,
+} from "utilities/supabase-client";
+import ApiClient from "utilities/api-client";
+import { supabase } from "@supabase/auth-ui-shared";
 
 function App() {
-	return (
-		<>
-			<Navigation />
-			<div id="App">
-				<Outlet />
-			</div>
-			<Footer />
-		</>
+	const [session, setSession] = useState(null);
+	useEffect(() => {
+		supabaseClient.auth.getSession().then(({ data: { session } }) => {
+			setSession(session);
+		});
+
+		const {
+			data: { subscription },
+		} = supabaseClient.auth.onAuthStateChange((_event, session) => {
+			setSession(session);
+		});
+
+		const getToken = () => {
+			const storageKey = `sb-${process.env.REACT_APP_SUPABASE_PROJECT_ID}-auth-token`;
+			const sessionDataString = localStorage.getItem(storageKey);
+			const sessionData = JSON.parse(sessionDataString || "null");
+			const token = sessionData?.access_token;
+
+			return token;
+		};
+
+		supabaseClient.auth.refreshSession().then(({ data: { session } }) => {
+			setSession(session);
+			console.log("Session refreshed", session);
+			ApiClient.setJwt(getToken());
+		});
+
+		return () => subscription.unsubscribe();
+	}, []);
+
+	return useMemo(
+		() => (
+			<SupabaseSessionContext.Provider value={[session, setSession]}>
+				<Navigation />
+				<div id="App">
+					<Outlet />
+				</div>
+				<Footer />
+			</SupabaseSessionContext.Provider>
+		),
+		[session, setSession]
 	);
 }
 
@@ -33,6 +68,10 @@ function Footer() {
 }
 
 function Navigation() {
+	const [session, _] = useContext(SupabaseSessionContext);
+
+	const authenticationLinkText = session ? "Profile" : "Sign In";
+
 	return (
 		<nav className="centered">
 			<NavigationMenu className="padding-small">
@@ -62,7 +101,7 @@ function Navigation() {
 							<NavigationMenuLink
 								className={navigationMenuTriggerStyle()}
 							>
-								Profile
+								{authenticationLinkText}
 							</NavigationMenuLink>
 						</Link>
 					</NavigationMenuItem>

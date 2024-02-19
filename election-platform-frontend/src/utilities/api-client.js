@@ -1,18 +1,28 @@
 export default class ApiClient {
 	apiUrl;
+	static jwt;
 
-	constructor(url) {
+	constructor(url, jwt = undefined) {
 		this.apiUrl = url;
+		if (jwt) {
+			ApiClient.jwt = jwt;
+		}
+	}
+
+	static setJwt(jwt) {
+		ApiClient.jwt = jwt;
 	}
 
 	get = {
 		user: async (id = null) => {
-			console.log("processing request");
 			const url = id
 				? `${this.apiUrl}/users/${id}`
 				: `${this.apiUrl}/users`;
-			console.log("processing request:", url);
-			const response = await fetch(url);
+			const response = await fetch(url, {
+				headers: {
+					Authorization: `Bearer ${ApiClient.jwt}`,
+				},
+			});
 			const data = await response.json();
 			return data;
 		},
@@ -20,7 +30,13 @@ export default class ApiClient {
 			const url = id
 				? `${this.apiUrl}/elections/${id}`
 				: `${this.apiUrl}/elections`;
-			const response = await fetch(url);
+			const headers = {
+				Authorization: `Bearer ${ApiClient.jwt}`,
+			};
+			console.log("headers", headers);
+			const response = await fetch(url, {
+				headers,
+			});
 			const data = await response.json();
 			return data;
 		},
@@ -28,7 +44,11 @@ export default class ApiClient {
 			const url = id
 				? `${this.apiUrl}/candidates/${id}`
 				: `${this.apiUrl}/candidates`;
-			const response = await fetch(url);
+			const response = await fetch(url, {
+				headers: {
+					Authorization: `Bearer ${ApiClient.jwt}`,
+				},
+			});
 			const data = await response.json();
 			return data;
 		},
@@ -36,7 +56,11 @@ export default class ApiClient {
 			const url = id
 				? `${this.apiUrl}/votes/${id}`
 				: `${this.apiUrl}/votes`;
-			const response = await fetch(url);
+			const response = await fetch(url, {
+				headers: {
+					Authorization: `Bearer ${ApiClient.jwt}`,
+				},
+			});
 			const data = await response.json();
 			return data;
 		},
@@ -44,7 +68,11 @@ export default class ApiClient {
 			const url = id
 				? `${this.apiUrl}/parties/${id}`
 				: `${this.apiUrl}/parties`;
-			const response = await fetch(url);
+			const response = await fetch(url, {
+				headers: {
+					Authorization: `Bearer ${ApiClient.jwt}`,
+				},
+			});
 			const data = await response.json();
 			return data;
 		},
@@ -55,7 +83,11 @@ export default class ApiClient {
 			const url = id
 				? `${this.apiUrl}/${collectionName}/${id}`
 				: `${this.apiUrl}/${collectionName}`;
-			const response = await fetch(url);
+			const response = await fetch(url, {
+				headers: {
+					Authorization: `Bearer ${ApiClient.jwt}`,
+				},
+			});
 			const data = await response.json();
 			return data;
 		},
@@ -68,6 +100,7 @@ export default class ApiClient {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
+					Authorization: `Bearer ${ApiClient.jwt}`,
 				},
 				body: JSON.stringify(data),
 			});
@@ -80,6 +113,7 @@ export default class ApiClient {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
+					Authorization: `Bearer ${ApiClient.jwt}`,
 				},
 				body: JSON.stringify(data),
 			});
@@ -95,6 +129,7 @@ export default class ApiClient {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
+					Authorization: `Bearer ${ApiClient.jwt}`,
 				},
 				body: JSON.stringify(data),
 			});
@@ -107,6 +142,7 @@ export default class ApiClient {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
+					Authorization: `Bearer ${ApiClient.jwt}`,
 				},
 				body: JSON.stringify(data),
 			});
@@ -119,6 +155,7 @@ export default class ApiClient {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
+					Authorization: `Bearer ${ApiClient.jwt}`,
 				},
 				body: JSON.stringify(data),
 			});
@@ -131,6 +168,7 @@ export default class ApiClient {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
+					Authorization: `Bearer ${ApiClient.jwt}`,
 				},
 				body: JSON.stringify(data),
 			});
@@ -146,6 +184,7 @@ export default class ApiClient {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
+					Authorization: `Bearer ${ApiClient.jwt}`,
 				},
 				body: JSON.stringify(data),
 			});
@@ -161,6 +200,7 @@ export default class ApiClient {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
+					Authorization: `Bearer ${ApiClient.jwt}`,
 				},
 				body: JSON.stringify(data),
 			});
@@ -179,6 +219,7 @@ export default class ApiClient {
 				method: "PUT",
 				headers: {
 					"Content-Type": "application/json",
+					Authorization: `Bearer ${ApiClient.jwt}`,
 				},
 				body: JSON.stringify(data),
 			});
@@ -194,6 +235,7 @@ export default class ApiClient {
 				method: "PUT",
 				headers: {
 					"Content-Type": "application/json",
+					Authorization: `Bearer ${ApiClient.jwt}`,
 				},
 				body: JSON.stringify(data),
 			});
@@ -209,6 +251,7 @@ export default class ApiClient {
 				method: "PUT",
 				headers: {
 					"Content-Type": "application/json",
+					Authorization: `Bearer ${ApiClient.jwt}`,
 				},
 				body: JSON.stringify(data),
 			});
@@ -224,6 +267,7 @@ export default class ApiClient {
 				method: "PUT",
 				headers: {
 					"Content-Type": "application/json",
+					Authorization: `Bearer ${ApiClient.jwt}`,
 				},
 				body: JSON.stringify(data),
 			});
@@ -240,6 +284,9 @@ export default class ApiClient {
 			const url = `${this.apiUrl}/users/${id}`;
 			const response = await fetch(url, {
 				method: "DELETE",
+				headers: {
+					Authorization: `Bearer ${ApiClient.jwt}`,
+				},
 			});
 			const responseData = await response.json();
 			return responseData;
@@ -251,6 +298,9 @@ export default class ApiClient {
 			const url = `${this.apiUrl}/elections/${id}`;
 			const response = await fetch(url, {
 				method: "DELETE",
+				headers: {
+					Authorization: `Bearer ${ApiClient.jwt}`,
+				},
 			});
 			const responseData = await response.json();
 			return responseData;
@@ -265,6 +315,9 @@ export default class ApiClient {
 			const url = `${this.apiUrl}/elections/${electionId}/parties/${partyId}`;
 			const response = await fetch(url, {
 				method: "DELETE",
+				headers: {
+					Authorization: `Bearer ${ApiClient.jwt}`,
+				},
 			});
 			const responseData = await response.json();
 			return responseData;
@@ -276,6 +329,9 @@ export default class ApiClient {
 			const url = `${this.apiUrl}/candidates/${id}`;
 			const response = await fetch(url, {
 				method: "DELETE",
+				headers: {
+					Authorization: `Bearer ${ApiClient.jwt}`,
+				},
 			});
 			const responseData = await response.json();
 			return responseData;
@@ -287,6 +343,9 @@ export default class ApiClient {
 			const url = `${this.apiUrl}/parties/${id}`;
 			const response = await fetch(url, {
 				method: "DELETE",
+				headers: {
+					Authorization: `Bearer ${ApiClient.jwt}`,
+				},
 			});
 			const responseData = await response.json();
 			return responseData;
@@ -301,6 +360,9 @@ export default class ApiClient {
 			const url = `${this.apiUrl}/parties/${partyId}/candidates/${candidateId}`;
 			const response = await fetch(url, {
 				method: "DELETE",
+				headers: {
+					Authorization: `Bearer ${ApiClient.jwt}`,
+				},
 			});
 			const responseData = await response.json();
 			return responseData;
