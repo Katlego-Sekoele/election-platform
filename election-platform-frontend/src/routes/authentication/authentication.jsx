@@ -52,7 +52,7 @@ export default function Authentication() {
 			email,
 			password,
 			options: {
-				// emailRedirectTo: "https://example.com/welcome",
+				emailRedirectTo: process.env.REACT_APP_URL,
 			},
 		});
 
