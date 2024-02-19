@@ -34,6 +34,8 @@ app.use(cookieParser());
 app.get('/auth/confirm', async function (req, res) {
   const token_hash = req.query.token_hash;
   const type = req.query.type;
+  console.log('token_hash', token_hash);
+  console.log('type', type);
   if (token_hash && type) {
     const supabase = supabaseClient.createClient({ req, res });
     const { error } = await supabase.auth.verifyOtp({
